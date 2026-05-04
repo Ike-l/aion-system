@@ -7,6 +7,9 @@ pub mod prelude {
             system_status::{
                 SystemStatus
             },
+            system_cell::{
+                SystemCell
+            },
             system_result::{
                 SystemResult,
             },
