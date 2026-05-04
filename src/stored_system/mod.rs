@@ -1,6 +1,6 @@
 pub use aion_program::prelude::{ProgramRegistry};
 
-use crate::prelude::{StoredSystemKind, StoredSystemMetadata};
+use crate::prelude::{StoredSystemKind};
 
 pub mod stored_sync_system;
 pub mod stored_async_system;
@@ -17,6 +17,5 @@ FunctionSystemBase
 
 pub struct StoredSystem {
     kind: Option<StoredSystemKind>,
-    metadata: StoredSystemMetadata,
 }
 
