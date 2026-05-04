@@ -5,7 +5,7 @@ pub mod prelude {
         stored_system::{
             StoredSystem,
             system_result::{
-                SystemResult
+                SystemResult,
             },
             system_error::{
                 SystemError
