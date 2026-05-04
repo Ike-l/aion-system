@@ -1,14 +1,30 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+pub mod stored_system;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub mod prelude {
+    pub use super::{
+        stored_system::{
+            StoredSystem,
+            system_id::{
+                SystemId
+            },
+            stored_system_kind::{
+                StoredSystemKind
+            },
+            stored_system_metadata::{
+                StoredSystemMetadata,
+                system_criteria::{
+                    SystemCriteria
+                }
+            },
+            stored_async_system::{
+                StoredAsyncSystem
+            },
+            stored_sync_system::{
+                StoredSyncSystem,
+                sync_system::{
+                    SyncSystem
+                }
+            }
+        }
+    };
 }
