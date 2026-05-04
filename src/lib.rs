@@ -23,7 +23,13 @@ pub mod prelude {
                 FunctionSystemBase
             },
             stored_async_system::{
-                StoredAsyncSystem
+                StoredAsyncSystem,
+                async_system::{
+                    AsyncSystem,
+                    into_async_system::{
+                        IntoAsyncSystem   
+                    }
+                }
             },
             stored_sync_system::{
                 StoredSyncSystem,
@@ -32,7 +38,7 @@ pub mod prelude {
                     into_sync_system::{
                         IntoSyncSystem,
                     },
-                }
+                },
             }
         }
     };
