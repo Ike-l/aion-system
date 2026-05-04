@@ -11,15 +11,12 @@ pub mod stored_system_metadata;
 pub mod system_result;
 pub mod system_id;
 /* 
-SystemResult
-SystemId
-
 FunctionSystemBase
 
 */
 
 pub struct StoredSystem {
-    kind: StoredSystemKind,
-    metadata: StoredSystemMetadata
+    kind: Option<StoredSystemKind>,
+    metadata: StoredSystemMetadata,
 }
 
