@@ -1,6 +1,8 @@
+use std::sync::{Arc, Mutex};
+
 use crate::prelude::{StoredAsyncSystem, StoredSyncSystem};
 
 pub enum StoredSystemKind {
-    Sync(StoredSyncSystem),
-    Async(StoredAsyncSystem)
+    Sync(Arc<Mutex<StoredSyncSystem>>),
+    Async(Arc<Mutex<StoredAsyncSystem>>)
 }
