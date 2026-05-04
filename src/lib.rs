@@ -4,6 +4,9 @@ pub mod prelude {
     pub use super::{
         stored_system::{
             StoredSystem,
+            system_status::{
+                SystemStatus
+            },
             system_result::{
                 SystemResult,
             },
