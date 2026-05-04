@@ -7,6 +7,9 @@ pub mod prelude {
             system_id::{
                 SystemId
             },
+            system_result::{
+                SystemResult
+            },
             stored_system_kind::{
                 StoredSystemKind
             },
