@@ -1,6 +1,6 @@
 use std::marker::PhantomData;
 
 pub struct FunctionSystemBase<Input, F> {
-    f: F,
-    marker: PhantomData<Input>
+    pub f: F,
+    pub marker: PhantomData<fn() -> Input>
 }
