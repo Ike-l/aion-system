@@ -7,7 +7,7 @@ pub mod stored_async_system;
 pub mod stored_system_kind;
 pub mod stored_system_metadata;
 pub mod system_result;
-pub mod system_id;
+pub mod system_error;
 pub mod function_system_base;
 
 pub struct StoredSystem {

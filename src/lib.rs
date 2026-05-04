@@ -4,11 +4,11 @@ pub mod prelude {
     pub use super::{
         stored_system::{
             StoredSystem,
-            system_id::{
-                SystemId
-            },
             system_result::{
                 SystemResult
+            },
+            system_error::{
+                SystemError
             },
             stored_system_kind::{
                 StoredSystemKind
@@ -19,13 +19,19 @@ pub mod prelude {
                     SystemCriteria
                 }
             },
+            function_system_base::{
+                FunctionSystemBase
+            },
             stored_async_system::{
                 StoredAsyncSystem
             },
             stored_sync_system::{
                 StoredSyncSystem,
                 sync_system::{
-                    SyncSystem
+                    SyncSystem,
+                    into_sync_system::{
+                        IntoSyncSystem,
+                    },
                 }
             }
         }
