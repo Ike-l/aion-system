@@ -28,10 +28,12 @@ macro_rules! impl_async_system_on_function_system {
                                 program_id: &program_id,
                                 program_password: program_password.as_ref(),
                                 user_details,
-                                resource_details: None
+                                resource_id: None,
+                                resource_access: None,
+                                resource_password: None,
                             }]) {
-                                Ok(item) => item,
-                                Err(resolve_resource_error) => {
+                                Ok(Ok(item)) => item,
+                                _ => {
                                     return Err(SystemError::ParameterFailure)
                                 }
                             }
