@@ -27,8 +27,8 @@ macro_rules! impl_async_system_on_function_system {
                     
                     $(
                         let $params = {
-                            match program_registry.resolve::<$params>(vec![PromptedProgramAccess {
-                                program_id: &program_id,
+                            match program_registry.resolve::<$params>(vec![AccessBuilder {
+                                program_id: Some(&program_id),
                                 program_password: program_password.as_ref(),
                                 user_details,
                                 resource_id: None,
@@ -53,7 +53,7 @@ macro_rules! impl_async_system_on_function_system {
 macro_rules! impl_all_async_system_on_function_system {
     () => {
         use std::{sync::Arc, pin::Pin};
-        pub use aion_program::prelude::{Injection, ProgramRegistry, PromptedProgramAccess, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess};
+        pub use aion_program::prelude::{Injection, ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess, AccessBuilder};
         pub use crate::prelude::{FunctionSystemBase, AsyncSystem, SystemResult, SystemError};
 
         impl_async_system_on_function_system!();
