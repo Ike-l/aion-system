@@ -1,6 +1,6 @@
 use aion_program::prelude::{ResourceId, ValuePassword, UserId, UserPassword};
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct StoredSystemMetadata {
     program_password: Option<ValuePassword>,
 
