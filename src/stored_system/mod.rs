@@ -12,4 +12,5 @@ pub mod function_system_base;
 
 pub struct StoredSystem {
     pub kind: Option<StoredSystemKind>,
+    pub enabled: bool
 }
