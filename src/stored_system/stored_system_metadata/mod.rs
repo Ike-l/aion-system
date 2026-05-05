@@ -17,6 +17,12 @@ pub struct StoredSystemMetadata {
     readonly: bool,
 }
 
+impl Clone for StoredSystemMetadata {
+    fn clone(&self) -> Self {
+        todo!()
+    }
+}
+
 impl StoredSystemMetadata {
     pub fn resource_id(&self) -> &ResourceId {
         &self.resource_id

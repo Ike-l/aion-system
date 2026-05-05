@@ -14,15 +14,5 @@ pub trait SyncSystem: Send + Sync {
         program_password: Option<&ValuePassword>,
         user_details: Option<(&UserId, &UserPassword)>
     ) -> Result<Option<SystemResult>, SystemError>;
-
-    fn check_read_only(&self) -> bool;
-
-    fn reserve_accesses(
-        &self,
-        program_registry: &Arc<ProgramRegistry>,
-        program_id: &ProgramId,
-        program_password: Option<&ValuePassword>,
-        user_details: Option<(&UserId, &UserPassword)>,
-    ) -> bool;
 }
 

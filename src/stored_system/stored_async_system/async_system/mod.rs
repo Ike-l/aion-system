@@ -14,14 +14,4 @@ pub trait AsyncSystem: Send + Sync {
         program_password: Option<ValuePassword>,
         user_details: Option<(UserId, UserPassword)>
     ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>>;
-
-    fn check_read_only(&self) -> bool;
-
-    fn reserve_accesses(
-        &self,
-        program_registry: &Arc<ProgramRegistry>,
-        program_id: &ProgramId,
-        program_password: Option<&ValuePassword>,
-        user_details: Option<(&UserId, &UserPassword)>,
-    ) -> bool;
 }
