@@ -15,9 +15,6 @@ pub mod prelude {
             },
             stored_system_metadata::{
                 StoredSystemMetadata,
-                system_criteria::{
-                    SystemCriteria
-                }
             },
             function_system_base::{
                 FunctionSystemBase
