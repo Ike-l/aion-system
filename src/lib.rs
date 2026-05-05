@@ -15,6 +15,9 @@ pub mod prelude {
             },
             stored_system_metadata::{
                 StoredSystemMetadata,
+                stored_access_builder::{
+                    StoredAccessBuilder
+                }
             },
             function_system_base::{
                 FunctionSystemBase

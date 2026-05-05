@@ -1,19 +1,20 @@
-use aion_program::prelude::{ResourceId, ValuePassword, UserId, UserPassword, ResourceAccess};
+use aion_program::prelude::{ResourceId, ValuePassword, UserId, UserPassword};
+
+use crate::prelude::StoredAccessBuilder;
+
+pub mod stored_access_builder;
 
 // rename to executable metadata?
-
 #[derive(Debug, Clone)]
 pub struct StoredSystemMetadata {
-    program_password: Option<ValuePassword>,
+    system_program_password: Option<ValuePassword>,
 
     system_resource_id: ResourceId,
     system_resource_password: Option<ValuePassword>,
 
     user_details: Option<(UserId, UserPassword)>,
 
-    resource_ids: Vec<ResourceId>,
-    resource_passwords: Vec<ValuePassword>,
-    resource_accesses: Vec<ResourceAccess>
+    stored_access_builders: Vec<StoredAccessBuilder>,
 }
 
 impl StoredSystemMetadata {
@@ -21,24 +22,16 @@ impl StoredSystemMetadata {
         &self.system_resource_id
     }
 
-    pub fn resource_ids(&self) -> &Vec<ResourceId> {
-        &self.resource_ids
-    }
-
-    pub fn resource_passwords(&self) -> &Vec<ValuePassword> {
-        &self.resource_passwords
-    }
-
-    pub fn resource_accesses(&self) -> &Vec<ResourceAccess> {
-        &self.resource_accesses
-    }
-
     pub fn system_resource_password(&self) -> &Option<ValuePassword> {
         &self.system_resource_password
     }
 
-    pub fn program_password(&self) -> &Option<ValuePassword> {
-        &self.program_password
+    pub fn stored_access_builders(&self) -> &Vec<StoredAccessBuilder> {
+        &self.stored_access_builders
+    }
+
+    pub fn system_program_password(&self) -> &Option<ValuePassword> {
+        &self.system_program_password
     }
 
     pub fn user_details(&self) -> &Option<(UserId, UserPassword)> {
