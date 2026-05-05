@@ -2,7 +2,7 @@ use std::{pin::Pin, sync::Arc};
 
 use crate::prelude::{SystemResult, SystemError};
 
-use aion_program::prelude::{ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess};
+use aion_program::prelude::{ProgramRegistry, OwnedAccessBuilder};
 
 pub mod into_async_system;
 
@@ -10,11 +10,7 @@ pub trait AsyncSystem: Send + Sync {
     fn execute<'a>(
         &'a mut self,
         program_registry: Arc<ProgramRegistry>,
-        program_id: ProgramId,
-        program_password: Option<ValuePassword>,
-        user_details: Option<(UserId, UserPassword)>,
-        resource_ids: Vec<ResourceId>,
-        resource_passwords: Vec<ValuePassword>,
-        resource_accesses: Vec<ResourceAccess>
+        auto_access_builder: OwnedAccessBuilder,
+        manual_access_builders: Vec<OwnedAccessBuilder>,
     ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>>;
 }

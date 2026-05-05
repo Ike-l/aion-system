@@ -4,6 +4,7 @@ macro_rules! impl_async_system_on_function_system {
     ) => {
         #[allow(unused_variables)]
         #[allow(non_snake_case)]
+        #[allow(unused_assignments)]
         impl<F, Fut, $($params: Injection),*> AsyncSystem for FunctionSystemBase<($($params,)*), F>
             where
                 Fut: Future<Output = Option<SystemResult>> + Send + 'static,
@@ -15,32 +16,52 @@ macro_rules! impl_async_system_on_function_system {
             fn execute<'a>(
                 &'a mut self, 
                 program_registry: Arc<ProgramRegistry>,
-                program_id: ProgramId,
-                program_password: Option<ValuePassword>,
-                user_details: Option<(UserId, UserPassword)>,
-                resource_ids: Vec<ResourceId>,
-                resource_passwords: Vec<ValuePassword>,
-                resource_accesses: Vec<ResourceAccess>
+                auto_access_builder: OwnedAccessBuilder,
+                manual_access_builders: Vec<OwnedAccessBuilder>,
             ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>> {
                 Box::pin(async move {
-                    let user_details = user_details.as_ref().map(|(user_id, user_password)| (user_id, user_password));
-                    
+                    #[allow(unused_mut)]
+                    let mut manual_access_builders: Vec<AccessBuilder<'_>> = manual_access_builders.iter().map(AccessBuilder::from).collect();
+
+                    #[allow(unused_mut)]
+                    let mut claims: HashMap<usize, Vec<AccessBuilder>> = HashMap::new();
+                    #[allow(unused_mut)]
+                    let mut absolute_index = 0;
+                    $(
+                        let mut indexes = $params::claim_indexes(manual_access_builders.iter().collect());
+                        indexes.sort();
+                        let sorted_indexes = indexes;
+
+                        let claimed_access_builders = sorted_indexes.iter().rev().filter_map(|index| {
+                            if manual_access_builders.len() > *index {
+                                Some(manual_access_builders.remove(*index))
+                            } else {
+                                None
+                            }
+                        }).rev().collect();
+
+                        claims.insert(absolute_index, claimed_access_builders);
+
+                        absolute_index += 1;
+                    )*
+
+                    #[allow(unused_mut)]
+                    let mut absolute_index = 0;
                     $(
                         let $params = {
-                            match program_registry.resolve::<$params>(vec![AccessBuilder {
-                                program_id: Some(&program_id),
-                                program_password: program_password.as_ref(),
-                                user_details,
-                                resource_id: None,
-                                resource_access: None,
-                                resource_password: None,
-                            }]) {
+                            let claimed_access_builders = claims.remove(&absolute_index).unwrap();
+                            let mut access_builders: Vec<AccessBuilder> = vec![(&auto_access_builder).into()];
+                            access_builders.extend(claimed_access_builders);
+
+                            match program_registry.resolve::<$params>(access_builders) {
                                 Ok(Ok(item)) => item,
                                 _ => {
                                     return Err(SystemError::ParameterFailure)
                                 }
                             }
                         };
+
+                        absolute_index += 1;
                     )*
 
                     Ok((self.f)($($params),*).await)
@@ -52,8 +73,8 @@ macro_rules! impl_async_system_on_function_system {
 
 macro_rules! impl_all_async_system_on_function_system {
     () => {
-        use std::{sync::Arc, pin::Pin};
-        pub use aion_program::prelude::{Injection, ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess, AccessBuilder};
+        use std::{sync::Arc, pin::Pin, collections::HashMap};
+        pub use aion_program::prelude::{Injection, ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess, OwnedAccessBuilder, AccessBuilder};
         pub use crate::prelude::{FunctionSystemBase, AsyncSystem, SystemResult, SystemError};
 
         impl_async_system_on_function_system!();
