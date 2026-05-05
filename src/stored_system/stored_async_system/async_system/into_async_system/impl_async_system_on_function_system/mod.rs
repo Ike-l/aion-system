@@ -17,7 +17,10 @@ macro_rules! impl_async_system_on_function_system {
                 program_registry: Arc<ProgramRegistry>,
                 program_id: ProgramId,
                 program_password: Option<ValuePassword>,
-                user_details: Option<(UserId, UserPassword)>
+                user_details: Option<(UserId, UserPassword)>,
+                resource_ids: Vec<ResourceId>,
+                resource_passwords: Vec<ValuePassword>,
+                resource_accesses: Vec<ResourceAccess>
             ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>> {
                 Box::pin(async move {
                     let user_details = user_details.as_ref().map(|(user_id, user_password)| (user_id, user_password));
@@ -50,7 +53,7 @@ macro_rules! impl_async_system_on_function_system {
 macro_rules! impl_all_async_system_on_function_system {
     () => {
         use std::{sync::Arc, pin::Pin};
-        pub use aion_program::prelude::{Injection, ProgramRegistry, PromptedProgramAccess, ProgramId, ValuePassword, UserId, UserPassword};
+        pub use aion_program::prelude::{Injection, ProgramRegistry, PromptedProgramAccess, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess};
         pub use crate::prelude::{FunctionSystemBase, AsyncSystem, SystemResult, SystemError};
 
         impl_async_system_on_function_system!();

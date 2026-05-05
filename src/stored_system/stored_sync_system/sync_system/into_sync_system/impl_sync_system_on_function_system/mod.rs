@@ -16,7 +16,10 @@ macro_rules! impl_sync_system_on_function_system {
                 program_registry: &Arc<ProgramRegistry>,
                 program_id: &ProgramId,
                 program_password: Option<&ValuePassword>,
-                user_details: Option<(&UserId, &UserPassword)>
+                user_details: Option<(&UserId, &UserPassword)>,
+                resource_ids: Vec<&ResourceId>,
+                resource_passwords: Vec<&ValuePassword>,
+                resource_accesses: Vec<&ResourceAccess>
             ) -> Result<Option<SystemResult>, SystemError> {
                 fn call_inner<$($params),*>(
                     mut f: impl FnMut($($params),*) -> Option<SystemResult>,
@@ -52,7 +55,7 @@ macro_rules! impl_sync_system_on_function_system {
 macro_rules! impl_all_sync_system_on_function_system {
     () => {
         use std::sync::Arc;
-        pub use aion_program::prelude::{Injection, ProgramRegistry, PromptedProgramAccess, ProgramId, ValuePassword, UserId, UserPassword};
+        pub use aion_program::prelude::{Injection, ProgramRegistry, PromptedProgramAccess, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess};
         pub use crate::prelude::{FunctionSystemBase, SyncSystem, SystemResult, SystemError};
 
         impl_sync_system_on_function_system!();
