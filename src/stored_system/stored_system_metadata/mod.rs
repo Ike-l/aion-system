@@ -34,6 +34,10 @@ impl StoredSystemMetadata {
         &self.user_details
     }
 
+    pub fn insert_access_builder(&mut self, access_builder: AccessBuilder) {
+        self.stored_access_builders.push(access_builder);
+    }
+
     pub fn get_builders(
         &self,
         program_id: ProgramId,
