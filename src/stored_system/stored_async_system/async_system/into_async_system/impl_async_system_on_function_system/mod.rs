@@ -16,13 +16,11 @@ macro_rules! impl_async_system_on_function_system {
             fn execute<'a>(
                 &'a mut self, 
                 program_registry: Arc<ProgramRegistry>,
-                auto_access_builder: OwnedAccessBuilder,
-                manual_access_builders: Vec<OwnedAccessBuilder>,
+                auto_access_builder: AccessBuilder,
+                #[allow(unused_mut)]
+                mut manual_access_builders: Vec<AccessBuilder>,
             ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>> {
                 Box::pin(async move {
-                    #[allow(unused_mut)]
-                    let mut manual_access_builders: Vec<AccessBuilder<'_>> = manual_access_builders.iter().map(AccessBuilder::from).collect();
-
                     #[allow(unused_mut)]
                     let mut claims: HashMap<usize, Vec<AccessBuilder>> = HashMap::new();
                     #[allow(unused_mut)]
@@ -50,7 +48,7 @@ macro_rules! impl_async_system_on_function_system {
                     $(
                         let $params = {
                             let claimed_access_builders = claims.remove(&absolute_index).unwrap();
-                            let mut access_builders: Vec<AccessBuilder> = vec![(&auto_access_builder).into()];
+                            let mut access_builders: Vec<AccessBuilder> = vec![auto_access_builder.clone()];
                             access_builders.extend(claimed_access_builders);
 
                             match program_registry.resolve::<$params>(access_builders) {
@@ -74,7 +72,7 @@ macro_rules! impl_async_system_on_function_system {
 macro_rules! impl_all_async_system_on_function_system {
     () => {
         use std::{sync::Arc, pin::Pin, collections::HashMap};
-        pub use aion_program::prelude::{Injection, ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess, OwnedAccessBuilder, AccessBuilder};
+        pub use aion_program::prelude::{Injection, ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess, AccessBuilder};
         pub use crate::prelude::{FunctionSystemBase, AsyncSystem, SystemResult, SystemError};
 
         impl_async_system_on_function_system!();

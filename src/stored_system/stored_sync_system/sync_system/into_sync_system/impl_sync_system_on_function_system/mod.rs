@@ -54,7 +54,7 @@ macro_rules! impl_sync_system_on_function_system {
                     let $params = {
                         let claimed_access_builders = claims.remove(&absolute_index).unwrap();
                         let mut access_builders = vec![auto_access_builder.clone()];
-                        access_builders.extend(claimed_access_builders.clone().into_iter().cloned());
+                        access_builders.extend(claimed_access_builders.into_iter().cloned());
 
                         match program_registry.resolve::<$params>(access_builders) {
                             Ok(Ok(item)) => item,
