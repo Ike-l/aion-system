@@ -69,6 +69,54 @@ macro_rules! impl_sync_system_on_function_system {
 
                 Ok(call_inner(&mut self.f, $($params),*))
             }
+        
+            fn check_accesses(
+                &self,
+                program_registry: &Arc<ProgramRegistry>,
+                auto_access_builder: &AccessBuilder,
+                #[allow(unused_mut)]
+                mut manual_access_builders: Vec<&AccessBuilder>,
+            ) -> bool { 
+                #[allow(unused_mut)]
+                let mut claims: HashMap<usize, Vec<&AccessBuilder>> = HashMap::new();
+                #[allow(unused_mut)]
+                let mut absolute_index = 0;
+                $(
+                    let mut indexes = $params::claim_indexes(manual_access_builders.clone());
+                    indexes.sort();
+                    let sorted_indexes = indexes;
+
+                    let claimed_access_builders = sorted_indexes.iter().rev().filter_map(|index| {
+                        if manual_access_builders.len() > *index {
+                            Some(manual_access_builders.remove(*index))
+                        } else {
+                            None
+                        }
+                    }).rev().collect();
+
+                    claims.insert(absolute_index, claimed_access_builders);
+
+                    absolute_index += 1;
+                )*
+
+                #[allow(unused_mut)]
+                let mut absolute_index = 0;
+                $(
+                    let $params = {
+                        let claimed_access_builders = claims.remove(&absolute_index).unwrap();
+                        let mut access_builders = vec![auto_access_builder.clone()];
+                        access_builders.extend(claimed_access_builders.into_iter().cloned());
+
+                        if !program_registry.check_resolve::<$params>(access_builders) {
+                            return false;
+                        }
+                    };
+
+                    absolute_index += 1;
+                )*
+
+                true
+            }
         }
     };
 }
