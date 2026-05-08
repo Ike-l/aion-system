@@ -13,4 +13,11 @@ pub trait AsyncSystem: Send + Sync {
         auto_access_builder: AccessBuilder,
         manual_access_builders: Vec<AccessBuilder>,
     ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>>;
+
+    fn check_accesses(
+        &self,
+        program_registry: &Arc<ProgramRegistry>,
+        auto_access_builder: &AccessBuilder,
+        manual_access_builders: Vec<&AccessBuilder>,
+    ) -> bool;
 }
