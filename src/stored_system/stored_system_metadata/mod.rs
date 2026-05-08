@@ -11,9 +11,15 @@ pub struct StoredSystemMetadata {
     user_details: Option<(UserId, UserPassword)>,
 
     stored_access_builders: Vec<AccessBuilder>,
+
+    requires_main_thread: bool,
 }
 
 impl StoredSystemMetadata {
+    pub fn requires_main_thread(&self) -> bool {
+        self.requires_main_thread
+    }
+
     pub fn system_resource_id(&self) -> &ResourceId {
         &self.system_resource_id
     }
