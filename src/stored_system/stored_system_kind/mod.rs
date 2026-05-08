@@ -21,10 +21,10 @@ impl StoredSystemKind {
     pub fn check_access(&self, program_registry: &Arc<ProgramRegistry>, auto_access_builder: &AccessBuilder, manual_access_builders: Vec<&AccessBuilder>) -> bool {
         match self {
             StoredSystemKind::Sync(sync_system) => {
-                sync_system.check_access(program_registry, auto_access_builder, manual_access_builders)  
+                sync_system.check_accesses(program_registry, auto_access_builder, manual_access_builders)  
             },
             StoredSystemKind::Async(async_system) => {
-                async_system.check_access(program_registry, auto_access_builder, manual_access_builders)
+                async_system.check_accesses(program_registry, auto_access_builder, manual_access_builders)
             },
         }
     }
