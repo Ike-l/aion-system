@@ -44,11 +44,16 @@ impl StoredSystemMetadata {
         self.stored_access_builders.push(access_builder);
     }
 
-    pub fn get_builders(
+    pub fn build_access_builders(
         &self,
         program_id: ProgramId,
     ) -> (AccessBuilder, Vec<AccessBuilder>) {
-        let auto_access_builder = AccessBuilder {
+        let auto_access_builder = self.generate_auto_access_builder(program_id);
+        (auto_access_builder, self.stored_access_builders.clone())
+    }
+
+    pub fn generate_auto_access_builder(&self, program_id: ProgramId) -> AccessBuilder {
+        AccessBuilder {
             program_id: Some(program_id),
             program_password: self.system_program_password().clone(),
             user_details: self.user_details.clone(),
@@ -56,8 +61,14 @@ impl StoredSystemMetadata {
             resource_id: None,
             resource_access: None,
             resource_password: None,
-        };
+        }
+    }
 
-        (auto_access_builder, self.stored_access_builders.clone())
+    pub fn get_access_builders(
+        &self,
+        program_id: ProgramId,
+    ) -> (AccessBuilder, &Vec<AccessBuilder>) {
+        let auto_access_builder = self.generate_auto_access_builder(program_id);
+        (auto_access_builder, &self.stored_access_builders)
     }
 }
