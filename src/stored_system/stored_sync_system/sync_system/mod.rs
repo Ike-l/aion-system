@@ -13,5 +13,12 @@ pub trait SyncSystem: Send + Sync {
         auto_access_builder: &AccessBuilder,
         manual_access_builders: Vec<&AccessBuilder>,
     ) -> Result<Option<SystemResult>, SystemError>;
+
+    fn check_accesses(
+        &self,
+        program_registry: &Arc<ProgramRegistry>,
+        auto_access_builder: &AccessBuilder,
+        manual_access_builders: Vec<&AccessBuilder>,
+    ) -> bool;
 }
 
