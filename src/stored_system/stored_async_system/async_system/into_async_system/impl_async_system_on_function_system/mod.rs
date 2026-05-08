@@ -103,8 +103,11 @@ macro_rules! impl_async_system_on_function_system {
                         let mut access_builders = vec![auto_access_builder.clone()];
                         access_builders.extend(claimed_access_builders.into_iter().cloned());
 
-                        if !program_registry.check_resolve::<$params>(access_builders) {
-                            return false;
+                        match program_registry.resolve::<$params>(access_builders) {
+                            Ok(Ok(item)) => item,
+                            _ => {
+                                return false;
+                            }
                         }
                     };
 
