@@ -26,7 +26,7 @@ macro_rules! impl_async_system_on_function_system {
                     #[allow(unused_mut)]
                     let mut absolute_index = 0;
                     $(
-                        let mut indexes = $params::claim_indexes(manual_access_builders.iter().collect());
+                        let mut indexes = $params::claim_manual_access_builders(manual_access_builders.iter().collect());
                         indexes.sort();
                         let sorted_indexes = indexes;
 
@@ -78,7 +78,7 @@ macro_rules! impl_async_system_on_function_system {
                 #[allow(unused_mut)]
                 let mut absolute_index = 0;
                 $(
-                    let mut indexes = $params::claim_indexes(manual_access_builders.clone());
+                    let mut indexes = $params::claim_manual_access_builders(manual_access_builders.clone());
                     indexes.sort();
                     let sorted_indexes = indexes;
 
