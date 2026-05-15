@@ -1,41 +1,36 @@
-pub mod stored_system;
+pub mod system;
 
 pub mod prelude {
     pub use super::{
-        stored_system::{
-            StoredSystem,
-            system_result::{
-                SystemResult,
+        system::{
+            async_system::{
+                AsyncSystem,
+                async_system_executable::{
+                    AsyncSystemExecutable
+                },
+                into_async_system::{
+                    IntoAsyncSystem
+                }
+            },
+            sync_system::{
+                SyncSystem,
+                sync_system_executable::{
+                    SyncSystemExecutable
+                },
+                into_sync_system::{
+                    IntoSyncSystem
+                }
+            },
+            function_system::{
+                function_system_base::{
+                    FunctionSystemBase
+                }
             },
             system_error::{
                 SystemError
             },
-            stored_system_kind::{
-                StoredSystemKind
-            },
-            stored_system_metadata::{
-                StoredSystemMetadata,
-            },
-            function_system_base::{
-                FunctionSystemBase
-            },
-            stored_async_system::{
-                StoredAsyncSystem,
-                async_system::{
-                    AsyncSystem,
-                    into_async_system::{
-                        IntoAsyncSystem   
-                    }
-                }
-            },
-            stored_sync_system::{
-                StoredSyncSystem,
-                sync_system::{
-                    SyncSystem,
-                    into_sync_system::{
-                        IntoSyncSystem,
-                    },
-                },
+            system_result::{
+                SystemResult
             }
         }
     };

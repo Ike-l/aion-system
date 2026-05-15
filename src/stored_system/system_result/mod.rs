@@ -1,1 +1,0 @@
-pub type SystemResult = anyhow::Result<String>;

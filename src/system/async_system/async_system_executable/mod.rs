@@ -1,14 +1,14 @@
 use std::{pin::Pin, sync::Arc};
 
-use crate::prelude::{SystemResult, SystemError};
+use aion_program::prelude::{AccessBuilder, ProgramRegistry};
+use hecs::Entity;
 
-use aion_program::prelude::{ProgramRegistry, AccessBuilder};
+use crate::prelude::{SystemError, SystemResult};
 
-pub mod into_async_system;
-
-pub trait AsyncSystem: Send + Sync {
+pub trait AsyncSystemExecutable: Send + Sync {
     fn execute<'a>(
         &'a mut self,
+        system_entity: Entity,
         program_registry: Arc<ProgramRegistry>,
         auto_access_builder: AccessBuilder,
         manual_access_builders: Vec<AccessBuilder>,
@@ -16,6 +16,7 @@ pub trait AsyncSystem: Send + Sync {
 
     fn check_accesses(
         &self,
+        system_entity: Entity,
         program_registry: &Arc<ProgramRegistry>,
         auto_access_builder: &AccessBuilder,
         manual_access_builders: Vec<&AccessBuilder>,
