@@ -3,6 +3,10 @@ pub mod system;
 pub mod prelude {
     pub use super::{
         system::{
+            System,
+            program_details::{
+                ProgramDetails
+            },
             async_system::{
                 AsyncSystem,
                 async_system_executable::{
