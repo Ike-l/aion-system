@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::prelude::{SystemResult, SystemError};
+use crate::prelude::{ProgramDetails, SystemError, SystemResult};
 
 use aion_program::prelude::{ProgramRegistry, AccessBuilder};
 use hecs::Entity;
@@ -10,7 +10,7 @@ pub trait SyncSystemExecutable: Send + Sync {
         &mut self, 
         system_entity: Entity,
         program_registry: &Arc<ProgramRegistry>,
-        auto_access_builder: &AccessBuilder,
+        program_details: &ProgramDetails,
         manual_access_builders: Vec<&AccessBuilder>,
     ) -> Result<Option<SystemResult>, SystemError>;
 
@@ -18,7 +18,7 @@ pub trait SyncSystemExecutable: Send + Sync {
         &self,
         system_entity: Entity,
         program_registry: &Arc<ProgramRegistry>,
-        auto_access_builder: &AccessBuilder,
+        program_details: &ProgramDetails,
         manual_access_builders: Vec<&AccessBuilder>,
     ) -> bool;
 }

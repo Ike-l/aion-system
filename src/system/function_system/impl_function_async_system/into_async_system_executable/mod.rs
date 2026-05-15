@@ -17,7 +17,7 @@ macro_rules! impl_async_system_on_function_system {
                 &'a mut self, 
                 system_entity: Entity,
                 program_registry: Arc<ProgramRegistry>,
-                auto_access_builder: AccessBuilder,
+                program_details: ProgramDetails,
                 #[allow(unused_mut)]
                 mut manual_access_builders: Vec<AccessBuilder>,
             ) -> Pin<Box<dyn Future<Output = Result<Option<SystemResult>, SystemError>> + 'a + Send>> {
@@ -49,7 +49,7 @@ macro_rules! impl_async_system_on_function_system {
                     $(
                         let $params = {
                             let claimed_access_builders = claims.remove(&absolute_index).unwrap();
-                            let mut access_builders: Vec<AccessBuilder> = vec![auto_access_builder.clone()];
+                            let mut access_builders: Vec<AccessBuilder> = vec![program_details.clone().into_access_builder()];
                             access_builders.extend(claimed_access_builders);
 
                             match program_registry.resolve::<$params>(Some(system_entity), access_builders) {
@@ -71,7 +71,7 @@ macro_rules! impl_async_system_on_function_system {
                 &self,
                 system_entity: Entity,
                 program_registry: &Arc<ProgramRegistry>,
-                auto_access_builder: &AccessBuilder,
+                program_details: &ProgramDetails,
                 #[allow(unused_mut)]
                 mut manual_access_builders: Vec<&AccessBuilder>,
             ) -> bool { 
@@ -102,7 +102,7 @@ macro_rules! impl_async_system_on_function_system {
                 $(
                     let $params = {
                         let claimed_access_builders = claims.remove(&absolute_index).unwrap();
-                        let mut access_builders = vec![auto_access_builder.clone()];
+                        let mut access_builders = vec![program_details.clone().into_access_builder()];
                         access_builders.extend(claimed_access_builders.into_iter().cloned());
 
                         match program_registry.resolve::<$params>(Some(system_entity), access_builders) {
@@ -126,7 +126,7 @@ macro_rules! impl_all_async_system_on_function_system {
     () => {
         use std::{sync::Arc, pin::Pin, collections::HashMap};
         pub use aion_program::prelude::{Injection, ProgramRegistry, ProgramId, ValuePassword, UserId, UserPassword, ResourceId, ResourceAccess, AccessBuilder};
-        pub use crate::prelude::{FunctionSystemBase, AsyncSystemExecutable, SystemResult, SystemError};
+        pub use crate::prelude::{FunctionSystemBase, AsyncSystemExecutable, SystemResult, SystemError, ProgramDetails};
         use hecs::Entity;
 
         impl_async_system_on_function_system!();
