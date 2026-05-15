@@ -10,9 +10,22 @@ pub mod system_error;
 
 pub mod function_system;
 
-pub enum System {
+pub enum SystemKind {
     Async(AsyncSystem),
     Sync(SyncSystem),
+}
+pub struct System {
+    kind: Option<SystemKind>
+}
+
+impl System {
+    pub fn take_system(&mut self) -> Option<SystemKind> {
+        self.kind.take()
+    }
+
+    pub fn put_system(&mut self, system: SystemKind) -> Option<SystemKind> {
+        self.kind.replace(system)
+    }
 }
 
 // System:

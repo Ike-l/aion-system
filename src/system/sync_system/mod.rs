@@ -9,20 +9,10 @@ pub mod sync_system_executable;
 pub mod into_sync_system;
 
 pub struct SyncSystem {
-    executable: Option<Box<dyn SyncSystemExecutable>>
+    executable: Box<dyn SyncSystemExecutable>
 }
 
-type StoredSyncSystemExecutable = Box<dyn SyncSystemExecutable>;
-
 impl SyncSystem {
-    pub fn take_system(&mut self) -> Option<StoredSyncSystemExecutable> {
-        self.executable.take()
-    }
-
-    pub fn put_system(&mut self, system: StoredSyncSystemExecutable) -> Option<StoredSyncSystemExecutable> {
-        self.executable.replace(system)
-    }
-
     pub fn check_accesses(
         &self, 
         system_entity: Entity,
@@ -30,11 +20,6 @@ impl SyncSystem {
         program_details: &ProgramDetails,
         manual_access_builders: Vec<&AccessBuilder>
     ) -> bool {
-        match &self.executable {
-            Some(stored_system) => {
-                stored_system.check_accesses(system_entity, program_registry, program_details, manual_access_builders)
-            },
-            None => false,
-        }
+        self.executable.check_accesses(system_entity, program_registry, program_details, manual_access_builders)
     }
 }
