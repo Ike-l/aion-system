@@ -16,4 +16,8 @@ impl ProgramDetails {
             ..Default::default()
         }
     }
+
+    pub fn get_system_program(&self) -> &Option<ProgramId> {
+        &self.system_program
+    }
 }
